@@ -99,3 +99,5 @@ class Textastic:
         for label, nw in num_words.items():
             plt.bar(label, nw)
         plt.show()
+
+    def make_sankey(self):
