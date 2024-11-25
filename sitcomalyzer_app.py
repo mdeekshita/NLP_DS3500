@@ -9,7 +9,7 @@ from sitcomalyzer import Sitcomalyzer
 import pprint as pp
 
 def main():
-
+    # initialize class and load stop words and scripts
     sca = Sitcomalyzer()
     sca.load_stop_words("stopwords.txt")
     sca.load_text('bbt_script.txt', 'big bang theory')
@@ -23,7 +23,7 @@ def main():
     sca.load_text('seinfeld_script.txt', 'seinfeld')
     sca.load_text('the_good_place_script.txt', 'the good place')
 
-
+    #print data and show graphs
     pp.pprint(sca.data)
     sca.compare_sentiment_scores()
     sca.sub_plots()
