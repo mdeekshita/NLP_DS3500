@@ -20,9 +20,8 @@ def main():
 
 
     pp.pprint(tt.data)
-    tt.compare_sentiment_scores()
+    #tt.compare_sentiment_scores()
     tt.sub_plots()
-
 
 if __name__ == '__main__':
     main()

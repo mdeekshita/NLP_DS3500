@@ -45,6 +45,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+analyzer = SentimentIntensityAnalyzer()
 
 
 
@@ -56,10 +57,10 @@ class Textastic:
         datakey --> (filelabel --> datavalue)
         """
         self.data = defaultdict(dict)
-        self.analyzer = SentimentIntensityAnalyzer()
 
-    #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files:
+    #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
     def default_parser(self, filename):
+
 
         with open(filename, mode='r') as file:
             text = file.read()
@@ -67,20 +68,13 @@ class Textastic:
         words = text.split()
         clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
 
-
-        lines = text.splitlines()
-        sentiment_scores = []
-
-        for i in range(0, len(lines), 30):
-            group = " ".join(lines[i:i + 30])
-            sentiment = self.analyzer.polarity_scores(group)['compound']
-            sentiment_scores.append(sentiment)
-
+        sentiment_scores = analyzer.polarity_scores(text)
+        sentiment_score = sentiment_scores['compound']
 
         results = {
             'wordcount': Counter(clean_words),  
             'numwords': len(clean_words),
-            'sentiment': sentiment_scores
+            'sentiment': sentiment_score
         }
 
         return results
@@ -108,17 +102,10 @@ class Textastic:
 
 
     def compare_sentiment_scores(self):
-        plt.figure(figsize=(10, 6))
-
-        for label, sentiment_scores in self.data['sentiment'].items():
-            plt.plot([i for i in range(len(sentiment_scores))], sentiment_scores, label=label)
-
-        plt.title('Sentiment Scores for the Pilot Episode of Sitcoms')
-        plt.xlabel('Groups of 30 Lines')
-        plt.ylabel('Sentiment Score')
-        plt.legend()
+        sentiment_scores = self.data['sentiment']
+        for label, nw in sentiment_scores.items():
+            plt.bar(label, nw)
         plt.show()
-
 
     def make_sankey(self, k=None, user_defined_words=None):
         """
@@ -176,29 +163,29 @@ class Textastic:
         # Substitute names for codes in dataframe
         df = df.replace({src: lc_map, targ: lc_map})
         return df, labels
-    
+        
     def sub_plots(self):
         word_count = self.data['wordcount']
 
-        num_texts = len(word_count)
-        rows = int(num_texts**0.5)
-        cols = (num_texts + rows - 1) // rows
+        num_shows = len(word_count)
+        rows = int(num_shows ** 0.5)
+        cols = (num_shows + rows - 1) // rows
 
-        fig, axes = plt.subplots(rows, cols, figsize=(15, 10), squeeze=False)
-       
+        fig, axes = plt.subplots(rows, cols, figsize=(15, 10), squeeze=False)  
+        axes = axes.flatten()  
 
-        # Plot data for each text file
         for idx, (label, counter) in enumerate(word_count.items()):
-            # Get the top_n most common words and their counts
+            
             top_words = counter.most_common(10)
-           
-            ax = axes[idx]
-            ax.bar(top_words, color='skyblue')
+      
+            ax = axes[idx]  
+            ax.bar([word for word, _ in top_words], [count for _, count in top_words])
             ax.set_title(label)
             ax.set_xlabel('Words')
             ax.set_ylabel('Frequency')
             ax.tick_params(axis='x', rotation=45)
-      
-        print(word_count)
-        
+
+        plt.tight_layout()
+        plt.show()
+
 
