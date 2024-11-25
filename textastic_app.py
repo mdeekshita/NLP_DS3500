@@ -8,7 +8,7 @@ def main():
 
     tt = Textastic()
     tt.load_stop_words("stopwords.txt")
-    tt.load_text('bbt_script.txt', 'bbt')
+    tt.load_text('bbt_script.txt', 'big bang theory')
     tt.load_text('brooklyn99.txt', 'brooklyn99')
     tt.load_text('friends.txt', 'friends')
     tt.load_text('himym_script.txt', 'himym')
@@ -23,7 +23,7 @@ def main():
     pp.pprint(tt.data)
     tt.compare_sentiment_scores()
     tt.sub_plots()
-    tt.make_sankey(k=10)
+    tt.wordcount_sankey()
 
 if __name__ == '__main__':
     main()

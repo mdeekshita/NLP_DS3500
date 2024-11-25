@@ -131,19 +131,7 @@ class Textastic:
         for k, v in results.items():
             self.data[k][label] = v
 
-    def compare_sentiment_scores(self):
-
-        plt.figure(figsize=(15, 10))
-        for label, sentiment_scores in self.data['sentiment'].items():
-            plt.plot([i for i in range(len(sentiment_scores))], sentiment_scores, label=label)
-
-        plt.title('Sentiment Scores for the Pilot Episode of Sitcoms')
-        plt.xlabel('Groups of 30 Lines')
-        plt.ylabel('Sentiment Score')
-        plt.legend()
-        plt.show()
-
-    def make_sankey(self, k=None, user_defined_words=None):
+    def wordcount_sankey(self, word_list=None, k=5):
         """
         Generate a Sankey diagram from text name to word, where the thickness of the
         connection represents the word count of that word in the specified text.
@@ -152,8 +140,8 @@ class Textastic:
 
         # Prepare the data for the Sankey diagram
         for label, wordcount in self.data['wordcount'].items():
-            if user_defined_words:
-                words = user_defined_words
+            if word_list:
+                words = word_list
             elif k is not None:
                 words = [word for word, _ in wordcount.most_common(k)]
             else:
@@ -195,7 +183,19 @@ class Textastic:
         # Substitute names for codes in dataframe
         df = df.replace({src: lc_map, targ: lc_map})
         return df, labels
-        
+
+    def compare_sentiment_scores(self):
+
+        plt.figure(figsize=(15, 10))
+        for label, sentiment_scores in self.data['sentiment'].items():
+            plt.plot([i for i in range(len(sentiment_scores))], sentiment_scores, label=label)
+
+        plt.title('Sentiment Scores for the Pilot Episode of Sitcoms')
+        plt.xlabel('Groups of 30 Lines')
+        plt.ylabel('Sentiment Score')
+        plt.legend()
+        plt.show()
+
     def sub_plots(self):
         word_count = self.data['wordcount']
         num_shows = len(word_count)
