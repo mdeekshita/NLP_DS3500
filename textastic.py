@@ -45,7 +45,6 @@ import pandas as pd
 import plotly.graph_objects as go
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-analyzer = SentimentIntensityAnalyzer()
 
 
 
@@ -57,6 +56,7 @@ class Textastic:
         datakey --> (filelabel --> datavalue)
         """
         self.data = defaultdict(dict)
+        self.analyzer = SentimentIntensityAnalyzer()
        
 
     #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
@@ -69,13 +69,20 @@ class Textastic:
         words = text.split()
         clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
 
-        sentiment_scores = analyzer.polarity_scores(text)
-        sentiment_score = sentiment_scores['compound'] 
+
+        lines = text.splitlines()
+        sentiment_scores = []
+
+        for i in range(0, len(lines), 30):
+            group = " ".join(lines[i:i + 30])
+            sentiment = self.analyzer.polarity_scores(group)['compound']
+            sentiment_scores.append(sentiment)
+
 
         results = {
             'wordcount': Counter(clean_words),  
             'numwords': len(clean_words),
-            'sentiment': sentiment_score
+            'sentiment': sentiment_scores
         }
 
         return results
@@ -103,9 +110,14 @@ class Textastic:
 
 
     def compare_sentiment_scores(self):
-        sentiment_scores = self.data['sentiment']
-        for label, nw in sentiment_scores.items():
-            plt.bar(label, nw)
+
+        for label, sentiment_scores in self.data['sentiment'].items():
+            plt.plot([i for i in range(len(sentiment_scores))], sentiment_scores, label=label)
+
+        plt.title('Sentiment Scores for the Pilot Episode of Sitcoms')
+        plt.xlabel('Groups of 30 Lines')
+        plt.ylabel('Sentiment Score')
+        plt.legend()
         plt.show()
 
     def make_sankey(self, k=None, user_defined_words=None):
