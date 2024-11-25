@@ -22,6 +22,7 @@ def main():
     pp.pprint(tt.data)
     #tt.compare_sentiment_scores()
     tt.sub_plots()
+    tt.make_sankey()
 
 if __name__ == '__main__':
     main()
