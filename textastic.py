@@ -50,20 +50,9 @@ class Textastic:
         datakey --> (filelabel --> datavalue)
         """
         self.data = defaultdict(dict)
-
-    def default_parser(self, filename):
-        """ Parse a standard text file and produce
-        extract data results in the form of a dictionary. """
-
-        results = {
-            'wordcount': Counter("To be or not to be".split(" ")),
-            'numwords' : rnd.randrange(10, 1000)
-        }
-
-        return results
     
     #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
-    def defaultt_parser(seld, filename):
+    def default_parser(self, filename):
 
 
         with open(filename, mode='r') as file:
