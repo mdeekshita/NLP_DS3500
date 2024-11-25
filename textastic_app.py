@@ -11,7 +11,7 @@ def main():
     tt.load_text('file2.txt', 'B')
     tt.load_text('file3.txt', 'C')
     tt.load_text('file4.txt', 'D')
-    tt.load_text('brooklyn-99.csv', 'J', parser=tp.csv_parser)
+    tt.load_text('brooklyn-99.csv', 'Brooklyn-99', parser=tp.csv_parser)
 
     pp.pprint(tt.data)
 
