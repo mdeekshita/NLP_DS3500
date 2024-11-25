@@ -41,6 +41,8 @@ What get stored:
 from collections import defaultdict, Counter
 import random as rnd
 import matplotlib.pyplot as plt
+import pandas as pd
+import plotly.graph_objects as go
 
 class Textastic:
 
@@ -100,4 +102,59 @@ class Textastic:
             plt.bar(label, nw)
         plt.show()
 
-    def make_sankey(self):
+    def make_sankey(self, k=None, user_defined_words=None):
+        """
+        Generate a Sankey diagram from text name to word, where the thickness of the
+        connection represents the word count of that word in the specified text.
+
+        Parameters:
+        - k: Number of most common words to consider from each text.
+        - user_defined_words: A list of user-defined words to include in the Sankey diagram.
+        """
+        data = []
+
+        # Prepare the data for the Sankey diagram
+        for label, wordcount in self.data['wordcount'].items():
+            if user_defined_words:
+                words = user_defined_words
+            elif k is not None:
+                words = [word for word, _ in wordcount.most_common(k)]
+            else:
+                words = wordcount.keys()
+
+            for word in words:
+                if word in wordcount:
+                    data.append({'Text': label, 'Word': word, 'Count': wordcount[word]})
+
+        # Create a DataFrame for the Sankey diagram
+        df = pd.DataFrame(data)
+
+        # Use the sankey.py functions to create the diagram
+        df, labels = self._code_mapping(df, 'Text', 'Word')
+        link = {'source': df['Text'], 'target': df['Word'], 'value': df['Count']}
+
+        node = {
+            'label': labels,
+            'pad': 50,
+            'thickness': 50,
+            'line': {'color': 'black', 'width': 1}
+        }
+
+        sk = go.Sankey(link=link, node=node)
+        fig = go.Figure(sk)
+        fig.show()
+
+    def _code_mapping(self, df, src, targ):
+        """ Map labels in src and targ columns to integers """
+        df[src] = df[src].astype(str)
+        df[targ] = df[targ].astype(str)
+
+        # Get distinct labels
+        labels = sorted(list(set(list(df[src]) + list(df[targ]))))
+
+        # Get integer codes
+        lc_map = dict(zip(labels, range(len(labels))))
+
+        # Substitute names for codes in dataframe
+        df = df.replace({src: lc_map, targ: lc_map})
+        return df, labels
