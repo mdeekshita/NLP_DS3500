@@ -57,6 +57,7 @@ class Textastic:
         datakey --> (filelabel --> datavalue)
         """
         self.data = defaultdict(dict)
+       
 
     #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
     def default_parser(self, filename):
@@ -69,7 +70,7 @@ class Textastic:
         clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
 
         sentiment_scores = analyzer.polarity_scores(text)
-        sentiment_score = sentiment_scores['compound']
+        sentiment_score = sentiment_scores['compound'] 
 
         results = {
             'wordcount': Counter(clean_words),  
