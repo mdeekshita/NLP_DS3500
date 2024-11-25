@@ -74,6 +74,8 @@ class Sitcomalyzer:
         return results
 
     def load_stop_words(self, stopwords_file):
+        """ Register a document with the framework of a list of stop words to be ignored in loaded files """
+        # open and read stopword file, throw exception if fails
         try:
             if stopwords_file:
                 with open(stopwords_file, 'r') as file:
@@ -89,14 +91,17 @@ class Sitcomalyzer:
         """ Register a document with the framework.
         Extract and store data to be used later by
         the visualizations """
+        # parses data with either default parser or other specified one
         if parser is None:
             results = self.default_parser(filename)
         else:
             results = parser(filename)
 
+        # add label if not specified
         if label is None:
             label = filename
 
+        # label data and load text
         for k, v in results.items():
             self.data[k][label] = v
 
@@ -134,6 +139,7 @@ class Sitcomalyzer:
             'line': {'color': 'black', 'width': 1}
         }
 
+        # Create and show sankey diagram
         sk = go.Sankey(link=link, node=node)
         fig = go.Figure(sk)
         fig.show()
@@ -154,11 +160,13 @@ class Sitcomalyzer:
         return df, labels
 
     def compare_sentiment_scores(self):
-
+        """ Generate a  line plot to show the range of sentiment analysis scores
+        for each sitcom over a series of lines """
         plt.figure(figsize=(15, 10))
         for label, sentiment_scores in self.data['sentiment'].items():
             plt.plot([i for i in range(len(sentiment_scores))], sentiment_scores, label=label)
 
+        # Add labels and show graph
         plt.title('Sentiment Scores for the Pilot Episode of Sitcoms')
         plt.xlabel('Groups of 30 Lines')
         plt.ylabel('Sentiment Score')
@@ -166,6 +174,7 @@ class Sitcomalyzer:
         plt.show()
 
     def sub_plots(self):
+        """ Plot top ten words in sitcom episode from wordcount tuples with frequencies"""
         word_count = self.data['wordcount']
         num_shows = len(word_count)
         rows = int(num_shows ** 0.5)
@@ -173,6 +182,7 @@ class Sitcomalyzer:
         fig, axes = plt.subplots(rows, cols, figsize=(15, 10), squeeze=False)  
         axes = axes.flatten()  
 
+        # create graphs and show
         for idx, (label, counter) in enumerate(word_count.items()):
             top_words = counter.most_common(10)
             ax = axes[idx]  
