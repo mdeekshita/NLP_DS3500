@@ -50,7 +50,7 @@ class Textastic:
         datakey --> (filelabel --> datavalue)
         """
         self.data = defaultdict(dict)
-    
+
     #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
     def default_parser(self, filename):
 
@@ -68,15 +68,12 @@ class Textastic:
         }
 
         return results
-    
-
 
     def load_stop_words(self, stopwords_file):
         if stopwords_file:
             with open(stopwords_file, 'r') as file:
                 self.stop_words.update(file.read().splitlines())
         print(f"Stop words loaded: {len(self.stop_words)} words.")
-
 
     def load_text(self, filename, label=None, parser=None):
         """ Register a document with the framework.
