@@ -45,6 +45,10 @@ import pandas as pd
 import plotly.graph_objects as go
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+class TextasticParsingError(Exception):
+    """Exception raised for errors in the Textastic framework's parsing."""
+    def __init__(self, message):
+        super().__init__(message)
 
 
 
@@ -60,12 +64,15 @@ class Textastic:
         self.stop_words = set()
 
 
-    #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
     def default_parser(self, filename):
 
-
-        with open(filename, mode='r') as file:
-            text = file.read()
+        try:
+            with open(filename, 'r') as file:
+                text = file.read()
+        except FileNotFoundError as e:
+            raise TextasticParsingError(f"File not found: {filename}") from e
+        except Exception as e:
+            raise TextasticParsingError(f"An error occurred while parsing the file: {filename}") from e
 
         words = text.split()
         clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
