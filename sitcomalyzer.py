@@ -1,52 +1,21 @@
 """
-
-file: textastic.py
+file: sitcomalyzer.py
 
 Description: A reusable library for text analysis and comparison
 In theory, the framework should support any collection of texts
 of interest (though this might require the implementation of some
 custom parsers.)
-
-Possible sources for your mini-project
-
-- gutenburg texts
-- political speech
-- tweet compilations
-- corporate filings
-- philosophy treatises
-- letters, journals, diaries
-- blogs
-- news articles
-
-
-The core data structure:
-
-Input: "A" --> raw text,  "B" --> another text
-
-Extract wordcounts:
-        "A" --> wordcounts_A,   "B" --> wordcounts_B, ......
-
-What get stored:
-
-        "wordcounts"  --->   {"A" --> wordcounts_A,
-                              "B" --> wordcounts_B, etc.}
-
-        e.g., dict[wordcounts][A] --> wordcounts_A
-
-
-
 """
 
 
 from collections import defaultdict, Counter
-import random as rnd
 import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.graph_objects as go
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-class TextasticParsingError(Exception):
-    """Exception raised for errors in the Textastic framework's parsing."""
+class SitcomalyzerParsingError(Exception):
+    """Exception raised for errors in the Sitcomalyzer framework's parsing."""
     def __init__(self, message):
         super().__init__(message)
 
@@ -58,8 +27,7 @@ class StopWordError(Exception):
     """Raised when an issue with stop words occurs."""
     pass
 
-
-class Textastic:
+class Sitcomalyzer:
 
     def __init__(self):
         """ Constructor
@@ -77,9 +45,9 @@ class Textastic:
             with open(filename, 'r') as file:
                 text = file.read()
         except FileNotFoundError as e:
-            raise TextasticParsingError(f"File not found: {filename}") from e
+            raise SitcomalyzerParsingError(f"File not found: {filename}") from e
         except Exception as e:
-            raise TextasticParsingError(f"An error occurred while parsing the file: {filename}") from e
+            raise SitcomalyzerParsingError(f"An error occurred while parsing the file: {filename}") from e
 
         try:
             words = text.split()

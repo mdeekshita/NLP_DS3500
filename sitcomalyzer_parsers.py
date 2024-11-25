@@ -1,4 +1,11 @@
+"""
+file: sitcomalyzer.py
 
+Description: A reusable library for text analysis and comparison
+In theory, the framework should support any collection of texts
+of interest (though this might require the implementation of some
+custom parsers.)
+"""
 
 import json
 from collections import Counter
