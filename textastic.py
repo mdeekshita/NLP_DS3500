@@ -84,7 +84,7 @@ class Textastic:
         try:
             words = text.split()
             clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
-            clean_words = [word for word in clean_words if word not in self.stop_words]
+            clean_words = [word for word in clean_words if word not in self.stop_words.isupper()]
         except Exception as e:
             raise ParsingError(f"An error occurred during parsing: {str(e)}")
 
