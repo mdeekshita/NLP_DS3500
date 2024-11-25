@@ -68,7 +68,7 @@ class Textastic:
 
         words = text.split()
         clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
-
+        clean_words = [word for word in clean_words if not word.isupper()]
 
         lines = text.splitlines()
         sentiment_scores = []
