@@ -51,8 +51,6 @@ class Textastic:
         """
         self.data = defaultdict(dict)
 
-
-
     def default_parser(self, filename):
         """ Parse a standard text file and produce
         extract data results in the form of a dictionary. """
@@ -63,6 +61,31 @@ class Textastic:
         }
 
         return results
+    
+    def csv_parser(self, filename):
+
+        # Read the CSV file
+            with open(filename, mode='r', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                text = []
+            
+                # Combine all text from relevant rows/columns (assume first row is a header)
+                for row in reader:
+                    text.extend(row)  # Add all columns in the row to the text list
+
+            # Join the text content and preprocess
+            combined_text = ' '.join(text)
+            words = combined_text.split()
+            clean_words = [word.lower().strip(".,!?;:\"'()[]{}") for word in words if word.isalpha()]
+
+            # Generate results
+            results = {
+                'wordcount': Counter(clean_words),
+                'numwords': len(clean_words)
+            }
+
+            return results
+
 
     def load_stop_words(self, stopwords_file):
         if stopwords_file:
