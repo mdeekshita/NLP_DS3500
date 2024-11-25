@@ -62,29 +62,24 @@ class Textastic:
 
         return results
     
-    def csv_parser(self, filename):
+    #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
+    def defaultt_parser(seld, filename):
 
-        # Read the CSV file
-            with open(filename, mode='r', encoding='utf-8') as file:
-                reader = csv.reader(file)
-                text = []
-            
-                # Combine all text from relevant rows/columns (assume first row is a header)
-                for row in reader:
-                    text.extend(row)  # Add all columns in the row to the text list
 
-            # Join the text content and preprocess
-            combined_text = ' '.join(text)
-            words = combined_text.split()
-            clean_words = [word.lower().strip(".,!?;:\"'()[]{}") for word in words if word.isalpha()]
+        with open(filename, mode='r') as file:
+            text = file.read()
+        
+        words = text.split()
+        clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
 
-            # Generate results
-            results = {
-                'wordcount': Counter(clean_words),
-                'numwords': len(clean_words)
-            }
 
-            return results
+        results = {
+            'wordcount': Counter(clean_words),  
+            'numwords': len(clean_words),   
+        }
+
+        return results
+    
 
 
     def load_stop_words(self, stopwords_file):
