@@ -164,4 +164,28 @@ class Textastic:
         df = df.replace({src: lc_map, targ: lc_map})
         return df, labels
     
-   
+    def sub_plots(self):
+        word_count = self.data['wordcount']
+
+        num_texts = len(word_count)
+        rows = int(num_texts**0.5)
+        cols = (num_texts + rows - 1) // rows
+
+        fig, axes = plt.subplots(rows, cols, figsize=(15, 10), squeeze=False)
+       
+
+        # Plot data for each text file
+        for idx, (label, counter) in enumerate(word_count.items()):
+            # Get the top_n most common words and their counts
+            top_words = counter.most_common(10)
+           
+            ax = axes[idx]
+            ax.bar(top_words, color='skyblue')
+            ax.set_title(label)
+            ax.set_xlabel('Words')
+            ax.set_ylabel('Frequency')
+            ax.tick_params(axis='x', rotation=45)
+      
+        print(word_count)
+        
+
