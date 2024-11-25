@@ -7,6 +7,7 @@ import pprint as pp
 def main():
 
     tt = Textastic()
+    tt.load_stop_words("stopwords.txt")
     tt.load_text('bbt_script.txt', 'bbt')
     tt.load_text('brooklyn99.txt', 'brooklyn99')
     tt.load_text('friends.txt', 'friends')
