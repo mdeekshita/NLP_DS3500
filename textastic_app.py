@@ -8,9 +8,9 @@ def main():
 
     tt = Textastic()
     tt.load_text('bbt_script.txt', 'bbt')
-    #tt.load_text('file2.txt', 'B')
-    #tt.load_text('file3.txt', 'C')
-    #tt.load_text('file4.txt', 'D')
+    tt.load_text('himym_script.txt', 'himym')
+    tt.load_text('modern_family_script', 'modern family')
+    tt.load_text('new_girl_script.txt', 'new girl')
     tt.load_text('brooklyn-99.csv', 'Brooklyn-99', parser=tp.csv_parser)
 
     pp.pprint(tt.data)
