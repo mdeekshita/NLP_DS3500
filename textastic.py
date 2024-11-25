@@ -61,14 +61,11 @@ class Textastic:
 
     #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
     def default_parser(self, filename):
-
-
         with open(filename, mode='r') as file:
             text = file.read()
 
         words = text.split()
         clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
-
 
         lines = text.splitlines()
         sentiment_scores = []
@@ -78,19 +75,16 @@ class Textastic:
             sentiment = self.analyzer.polarity_scores(group)['compound']
             sentiment_scores.append(sentiment)
 
-
         results = {
             'wordcount': Counter(clean_words),  
             'numwords': len(clean_words),
             'sentiment': sentiment_scores
         }
-
         return results
 
     def load_stop_words(self, stopwords_file):
-        if stopwords_file:
-            with open(stopwords_file, 'r') as file:
-                self.stop_words.update(file.read().splitlines())
+        with open(stopwords_file, 'r') as file:
+            self.stop_words.update(file.read().splitlines())
         print(f"Stop words loaded: {len(self.stop_words)} words.")
 
     def load_text(self, filename, label=None, parser=None):
@@ -108,9 +102,7 @@ class Textastic:
         for k, v in results.items():
             self.data[k][label] = v
 
-
     def compare_sentiment_scores(self):
-
         for label, sentiment_scores in self.data['sentiment'].items():
             plt.plot([i for i in range(len(sentiment_scores))], sentiment_scores, label=label)
 
@@ -124,10 +116,6 @@ class Textastic:
         """
         Generate a Sankey diagram from text name to word, where the thickness of the
         connection represents the word count of that word in the specified text.
-
-        Parameters:
-        - k: Number of most common words to consider from each text.
-        - user_defined_words: A list of user-defined words to include in the Sankey diagram.
         """
         data = []
 
@@ -179,18 +167,14 @@ class Textastic:
         
     def sub_plots(self):
         word_count = self.data['wordcount']
-
         num_shows = len(word_count)
         rows = int(num_shows ** 0.5)
         cols = (num_shows + rows - 1) // rows
-
         fig, axes = plt.subplots(rows, cols, figsize=(15, 10), squeeze=False)  
         axes = axes.flatten()  
 
         for idx, (label, counter) in enumerate(word_count.items()):
-            
             top_words = counter.most_common(10)
-      
             ax = axes[idx]  
             ax.bar([word for word, _ in top_words], [count for _, count in top_words])
             ax.set_title(label)
