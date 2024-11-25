@@ -2,7 +2,7 @@
 
 import json
 from collections import Counter
-import csv 
+import csv
 
 
 def json_parser(filename):
@@ -21,7 +21,7 @@ def csv_parser(filename):
             with open(filename, mode='r', encoding='utf-8') as file:
                 reader = csv.reader(file)
                 text = []
-            
+
                 # Combine all text from relevant rows/columns (assume first row is a header)
                 for row in reader:
                     text.extend(row)  # Add all columns in the row to the text list

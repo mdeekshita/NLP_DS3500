@@ -43,6 +43,11 @@ import random as rnd
 import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.graph_objects as go
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+analyzer = SentimentIntensityAnalyzer()
+
+
 
 class Textastic:
 
@@ -59,14 +64,17 @@ class Textastic:
 
         with open(filename, mode='r') as file:
             text = file.read()
-        
+
         words = text.split()
         clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
 
+        sentiment_scores = analyzer.polarity_scores(text)
+        sentiment_score = sentiment_scores['compound']
 
         results = {
             'wordcount': Counter(clean_words),  
-            'numwords': len(clean_words),   
+            'numwords': len(clean_words),
+            'sentiment': sentiment_score
         }
 
         return results
@@ -92,13 +100,10 @@ class Textastic:
         for k, v in results.items():
             self.data[k][label] = v
 
-    def compare_num_words(self):
-        """ This is a very simplistic visualization that creates
-        a bar chart comparing number of words.   (Not intended
-        for your project.)  """
 
-        num_words = self.data['numwords']
-        for label, nw in num_words.items():
+    def compare_sentiment_scores(self):
+        sentiment_scores = self.data['sentiment']
+        for label, nw in sentiment_scores.items():
             plt.bar(label, nw)
         plt.show()
 

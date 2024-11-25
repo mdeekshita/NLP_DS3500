@@ -20,8 +20,7 @@ def main():
 
 
     pp.pprint(tt.data)
-
-    tt.compare_num_words()
+    tt.compare_sentiment_scores()
 
 if __name__ == '__main__':
     main()
