@@ -1,14 +1,11 @@
 """
-file: sitcomalyzer.py
+file: sitcomalyzer_app.py
 
-Description: A reusable library for text analysis and comparison
-In theory, the framework should support any collection of texts
-of interest (though this might require the implementation of some
-custom parsers.)
+Description: Implementation of Sitcomalyzer that loads txts of scripts
+from pilot episodes of various sitcoms and shows different graphs
 """
 
 from sitcomalyzer import Sitcomalyzer
-import sitcomalyzer_parsers as tp
 import pprint as pp
 
 def main():

@@ -7,13 +7,13 @@ of interest (though this might require the implementation of some
 custom parsers.)
 """
 
-
 from collections import defaultdict, Counter
 import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.graph_objects as go
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+# EXCEPTIONS
 class SitcomalyzerParsingError(Exception):
     """Exception raised for errors in the Sitcomalyzer framework's parsing."""
     def __init__(self, message):
@@ -26,6 +26,7 @@ class ParsingError(Exception):
 class StopWordError(Exception):
     """Raised when an issue with stop words occurs."""
     pass
+
 
 class Sitcomalyzer:
 
