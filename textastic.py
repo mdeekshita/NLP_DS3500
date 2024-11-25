@@ -50,6 +50,13 @@ class TextasticParsingError(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+class ParsingError(Exception):
+    """Raised when a parsing error occurs."""
+    pass
+
+class StopWordError(Exception):
+    """Raised when an issue with stop words occurs."""
+    pass
 
 
 class Textastic:
@@ -74,10 +81,12 @@ class Textastic:
         except Exception as e:
             raise TextasticParsingError(f"An error occurred while parsing the file: {filename}") from e
 
-        words = text.split()
-        clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
-        clean_words = [word for word in clean_words if word not in self.stop_words]
-        clean_words = [word for word in clean_words if not  word.isupper()]
+        try:
+            words = text.split()
+            clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
+            clean_words = [word for word in clean_words if word not in self.stop_words]
+        except Exception as e:
+            raise ParsingError(f"An error occurred during parsing: {str(e)}")
 
         lines = text.splitlines()
         sentiment_scores = []
@@ -95,9 +104,16 @@ class Textastic:
         return results
 
     def load_stop_words(self, stopwords_file):
-        with open(stopwords_file, 'r') as file:
-            self.stop_words.update(file.read().splitlines())
-        print(f"Stop words loaded: {len(self.stop_words)} words.")
+        try:
+            if stopwords_file:
+                with open(stopwords_file, 'r') as file:
+                    self.stop_words.update(file.read().splitlines())
+            else:
+                raise StopWordError("Stopwords file not provided.")
+        except FileNotFoundError as e:
+            raise StopWordError(f"Stopwords file not found: {e}")
+        except Exception as e:
+            raise StopWordError(f"Unexpected error while loading stop words: {e}")
 
     def load_text(self, filename, label=None, parser=None):
         """ Register a document with the framework.
