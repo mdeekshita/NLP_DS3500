@@ -59,14 +59,16 @@ class Textastic:
 
         results = {
             'wordcount': Counter("To be or not to be".split(" ")),
-            'numwords' : rnd.randrange(10, 50)
+            'numwords' : rnd.randrange(10, 1000)
         }
 
         return results
 
     def load_stop_words(self, stopwords_file):
-        pass
-
+        if stopwords_file:
+            with open(stopwords_file, 'r') as file:
+                self.stop_words.update(file.read().splitlines())
+        print(f"Stop words loaded: {len(self.stop_words)} words.")
 
 
     def load_text(self, filename, label=None, parser=None):
