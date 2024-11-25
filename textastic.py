@@ -57,15 +57,19 @@ class Textastic:
         """
         self.data = defaultdict(dict)
         self.analyzer = SentimentIntensityAnalyzer()
-       
+        self.stop_words = set()
+
 
     #once we have files in this delete the above default_parser and use this one so that it actually reads through txt files: 
     def default_parser(self, filename):
+
+
         with open(filename, mode='r') as file:
             text = file.read()
 
         words = text.split()
         clean_words = [word.strip(".,!?;:\"'()[]{}") for word in words]
+        clean_words = [word for word in clean_words if word not in self.stop_words]
 
         lines = text.splitlines()
         sentiment_scores = []
@@ -103,6 +107,8 @@ class Textastic:
             self.data[k][label] = v
 
     def compare_sentiment_scores(self):
+
+        plt.figure(figsize=(15, 10))
         for label, sentiment_scores in self.data['sentiment'].items():
             plt.plot([i for i in range(len(sentiment_scores))], sentiment_scores, label=label)
 
